@@ -1,0 +1,1 @@
+Woops! I have deleted the content!UPLOAD INFILE "../data/ua_detrac/ua_detrac.mp4" PATH "video.mp4";
