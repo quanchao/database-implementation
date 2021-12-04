@@ -31,7 +31,7 @@ class DeleteTableStatement(AbstractStatement):
         table reference in the insert table statement
     """    
     def __init__(self, table: TableRef, path: str):
-        super().__init__(StatementType.)
+        super().__init__(StatementType.Delete)
         self._table = table
 
     def __str__(self) -> str:
