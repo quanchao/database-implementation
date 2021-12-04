@@ -33,7 +33,7 @@ class StatementType(IntEnum):
     CREATE_UDF = 4,
     LOAD_DATA = 5,
     UPLOAD = 6,
-    Delete = 7
+    Delete = 7,
     # add other types
 
 

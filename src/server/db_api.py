@@ -29,7 +29,6 @@ class EVACursor(object):
         """
         Send query to the EVA server.
         """
-        print("query", query)
         if self._pending_query:
             raise SystemError(
                 'EVA does not support concurrent queries. \
