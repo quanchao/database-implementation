@@ -32,8 +32,14 @@ def execute_query(query) -> Iterator[Batch]:
     Execute the query and return a result generator.
     """
     stmt = Parser().parse(query)[0]
+    print("stmt")
+    print(stmt)
     l_plan = StatementToPlanConvertor().visit(stmt)
+    print("l_plan")
+    print(l_plan)
     p_plan = PlanGenerator().build(l_plan)
+    print("p_plan")
+    print(p_plan)
     return PlanExecutor(p_plan).execute_plan()
 
 
