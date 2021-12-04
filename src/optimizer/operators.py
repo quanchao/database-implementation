@@ -373,6 +373,34 @@ class LogicalCreate(Operator):
                 and self.if_not_exists == other.if_not_exists)
 
 
+class LogicalDelete(Operator):
+    """Logical node for delete table operations
+
+    Arguments:
+        video {TableRef}: [video table that is to be created]
+    """
+
+    def __init__(self, video: TableRef, if_not_exists: bool = False, children=None):
+        super().__init__(OperatorType.LOGICALCREATE, children)
+        self._video = video
+        self._if_not_exists = if_not_exists
+
+    @property
+    def video(self):
+        return self._video
+
+    @property
+    def if_not_exists(self):
+        return self._if_not_exists
+
+    def __eq__(self, other):
+        is_subtree_equal = super().__eq__(other)
+        if not isinstance(other, LogicalDelete):
+            return False
+        return (is_subtree_equal
+                and self.video == other.video
+                and self.if_not_exists == other.if_not_exists)
+
 class LogicalCreateUDF(Operator):
     """
     Logical node for create udf operations
