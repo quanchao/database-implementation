@@ -16,7 +16,7 @@ from src.catalog.models.df_metadata import DataFrameMetadata
 from src.expression.abstract_expression import AbstractExpression
 from src.optimizer.operators import (LogicalGet, LogicalFilter, LogicalProject,
                                      LogicalInsert, LogicalCreate,
-                                     LogicalCreateUDF, LogicalLoadData,
+                                     LogicalCreateUDF, LogicalDelete, LogicalLoadData,
                                      LogicalUpload, LogicalQueryDerivedGet,
                                      LogicalUnion, LogicalOrderBy,
                                      LogicalLimit, LogicalSample)
@@ -25,6 +25,7 @@ from src.parser.select_statement import SelectStatement
 from src.parser.insert_statement import InsertTableStatement
 from src.parser.create_statement import CreateTableStatement
 from src.parser.create_udf_statement import CreateUDFStatement
+from src.parser.delete_statement import DeleteStatement
 from src.parser.load_statement import LoadDataStatement
 from src.parser.upload_statement import UploadStatement
 from src.optimizer.optimizer_utils import (bind_table_ref, bind_columns_expr,
@@ -209,6 +210,17 @@ class StatementToPlanConvertor:
                                           statement.udf_type)
         self._plan = create_udf_opr
 
+    def visit_delete(self, statement: DeleteStatement):
+        """Converter for parsed delete statement
+
+        Arguments:
+            statement {CreateUDFStatement} -- Delete Statement
+        """
+
+        create_udf_opr = LogicalDelete(statement.name, statement.if_not_exists)
+        self._plan = create_udf_opr
+
+
     def visit_load_data(self, statement: LoadDataStatement):
         """Convertor for parsed load data statement
         If the input table already exists we return its
@@ -255,6 +267,8 @@ class StatementToPlanConvertor:
             self.visit_load_data(statement)
         elif isinstance(statement, UploadStatement):
             self.visit_upload(statement)
+        elif isinstance(statement, DeleteStatement):
+            self.visit_delete(statement)
         return self._plan
 
     @property
