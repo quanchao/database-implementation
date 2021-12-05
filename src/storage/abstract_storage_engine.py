@@ -36,6 +36,15 @@ class AbstractStorageEngine(metaclass=ABCMeta):
         """
 
     @abstractmethod
+    def delete(self, table):
+        """Interface that implements all the necessary task required for
+            deleting the basic unit of storage(table or dataframe)
+
+        Attributes:
+            table: storage unit to be deleted
+        """
+
+    @abstractmethod
     def _open(self, table):
         """Internal function responsible for opening table to serve data
         update, delete, insert or scan.

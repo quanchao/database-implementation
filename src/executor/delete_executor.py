@@ -38,8 +38,6 @@ class DeleteExecution(AbstractExecutor):
 
         table_name = self.node.video_ref.table_info.table_name
         file_url = str(generate_file_path(table_name))
-        metadata = CatalogManager().delete_metadata(table_name,
-                                                    file_url,
-                                                    self.node.column_list)
+        metadata = CatalogManager().delete_metadata(table_name)
 
-        StorageEngine.delete(table=metadata)
+        #StorageEngine.delete(table=metadata)
