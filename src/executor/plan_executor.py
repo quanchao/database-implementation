@@ -30,6 +30,8 @@ from src.executor.upload_executor import UploadExecutor
 from src.executor.storage_executor import StorageExecutor
 from src.executor.union_executor import UnionExecutor
 from src.executor.orderby_executor import OrderByExecutor
+from src.executor. import UploadExecutor
+
 
 
 class PlanExecutor:

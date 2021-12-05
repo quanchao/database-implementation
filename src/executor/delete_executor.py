@@ -15,31 +15,31 @@
 
 from src.catalog.catalog_manager import CatalogManager
 from src.executor.abstract_executor import AbstractExecutor
-from src.planner.create_udf_plan import CreateUDFPlan
+from src.utils.generic_utils import generate_file_path
+from src.planner.delete_plan import DeletePlan
+from src.storage.storage_engine import StorageEngine
 
-
-class DeleteExecutor(AbstractExecutor):
-
-    def __init__(self, node: CreateUDFPlan):
+class DeleteExecution(AbstractExecutor):
+    def __init__(self, node: DeletePlan):
         super().__init__(node)
 
     def validate(self):
         pass
 
     def exec(self):
-        """Create udf executor
+        """Create table executor
 
-        Calls the catalog to create udf metadata.
+        Calls the catalog to create metadata corresponding to the table.
+        Calls the storage to create a spark dataframe from the metadata object.
         """
-        catalog_manager = CatalogManager()
         if (self.node.if_not_exists):
-            # check catalog if it already has this udf entry
-            if catalog_manager.get_udf_by_name(self.node.name):
-                return
-        io_list = []
-        io_list.extend(self.node.inputs)
-        io_list.extend(self.node.outputs)
-        impl_path = self.node.impl_path.absolute().as_posix()
-        catalog_manager.create_udf(
-            self.node.name, impl_path, self.node.udf_type,
-            io_list)
+            # check catalog if we already have this table
+            return
+
+        table_name = self.node.video_ref.table_info.table_name
+        file_url = str(generate_file_path(table_name))
+        metadata = CatalogManager().delete_metadata(table_name,
+                                                    file_url,
+                                                    self.node.column_list)
+
+        StorageEngine.delete(table=metadata)
